@@ -12,7 +12,7 @@ const Cadastro = () => {
     const [confirmarSenha, setConfirmarSenha] = useState('');
 
     const handleSubmit = (event) => {
-        event.preventDefault(); //isso é para não recarregar a página
+        event.preventDefault();
 
         if (senha !== confirmarSenha) {
             alert('As senhas não coincidem!');
@@ -26,10 +26,10 @@ const Cadastro = () => {
     return (
         <div className="container">
             <form onSubmit={handleSubmit}>
-                <div className="logo">
-                    <img src={logo} alt="Logo" />
-                </div>
-                <h1>Anjos Protetores de Animais   Cadastro</h1>
+                            <div className="logo">
+                                <img src={logo} alt="Logo" />
+                            </div>
+                <h1>Anjos Protetores de Animais - Cadastro</h1>
 
 
                 <div className='input-field'>
@@ -63,7 +63,8 @@ const Cadastro = () => {
                 </div>
 
                 <div className='input-field'>
-                    <input type="password"
+                    <input
+                        type="password"
                         placeholder="Confirmar senha"
                         onChange={(e) => setConfirmarSenha(e.target.value)}
                         required
