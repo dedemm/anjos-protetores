@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Inicio.css';
+import Navbar from '../Navbar/Navbar';
 
 const Inicio = () => {
     const [dogs, setDogs] = useState([]);
@@ -94,35 +95,7 @@ const Inicio = () => {
     return (
         <div className="inicio-container">
             {/* Navbar */}
-            <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-                <div className="nav-container">
-                    <div className="nav-logo">
-                        <h2>Anjos Protetores</h2>
-                    </div>
-                    <ul className="nav-menu">
-                        <li className="nav-item">
-                            <a href="#home" className="nav-link">Início</a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#about" className="nav-link">Sobre</a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#dogs" className="nav-link">Cachorros</a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#process" className="nav-link">Processo</a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#contact" className="nav-link">Contato</a>
-                        </li>
-                    </ul>
-                    <div className="nav-buttons">
-                        <button className="login-btn" onClick={handleLoginClick}>Login</button>
-                        <button className="adopt-btn" onClick={handleAdoptClick}>Quero Adotar</button>
-                    </div>
-                </div>
-            </nav>
-
+            < Navbar />
             {/* Hero Section */}
             <section id="home" className="hero-section">
                 <div className="hero-content">
@@ -173,15 +146,15 @@ const Inicio = () => {
                 <div className="container">
                     <h2>Cães Disponíveis para Adoção</h2>
                     <p className="section-subtitle">Conheça alguns dos nossos anjinhos que estão procurando um lar</p>
-                    
+
                     <div className="dogs-carousel">
                         <button className="carousel-btn prev" onClick={prevSlide}>‹</button>
                         <button className="carousel-btn next" onClick={nextSlide}>›</button>
-                        
+
                         <div className="carousel-track">
                             {dogs.map((dog, index) => (
-                                <div 
-                                    key={dog.id} 
+                                <div
+                                    key={dog.id}
                                     className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
                                     style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                                 >
@@ -202,18 +175,18 @@ const Inicio = () => {
                                 </div>
                             ))}
                         </div>
-                        
+
                         <div className="carousel-indicators">
                             {dogs.map((_, index) => (
-                                <button 
-                                    key={index} 
+                                <button
+                                    key={index}
                                     className={`indicator ${index === currentSlide ? 'active' : ''}`}
                                     onClick={() => goToSlide(index)}
                                 ></button>
                             ))}
                         </div>
                     </div>
-                    
+
                     <div className="view-all-dogs">
                         <button className="view-all-btn" onClick={handleAdoptClick}>Ver Todos os Cães</button>
                     </div>
@@ -225,7 +198,7 @@ const Inicio = () => {
                 <div className="container">
                     <h2>Como Adotar um Cão</h2>
                     <p className="section-subtitle">O processo de adoção é simples e seguro</p>
-                    
+
                     <div className="process-steps">
                         <div className="step">
                             <div className="step-icon">1</div>
@@ -256,7 +229,7 @@ const Inicio = () => {
                 <div className="container">
                     <h2>Histórias de Sucesso</h2>
                     <p className="section-subtitle">Veja o que as famílias adotantes têm a dizer</p>
-                    
+
                     <div className="testimonials">
                         <div className="testimonial">
                             <div className="testimonial-content">
@@ -267,7 +240,7 @@ const Inicio = () => {
                                 <p>Família adotante da Luna</p>
                             </div>
                         </div>
-                        
+
                         <div className="testimonial">
                             <div className="testimonial-content">
                                 <p>"O Rex se adaptou perfeitamente à nossa casa. Estamos muito gratos ao Anjos Protetores por todo o apoio durante o processo de adoção."</p>
@@ -308,7 +281,7 @@ const Inicio = () => {
                                 <a href="#"><i className="fab fa-twitter"></i></a>
                             </div>
                         </div>
-                        
+
                         <div className="footer-section">
                             <h4>Links Rápidos</h4>
                             <ul>
@@ -318,7 +291,7 @@ const Inicio = () => {
                                 <li><a href="#process">Processo de Adoção</a></li>
                             </ul>
                         </div>
-                        
+
                         <div className="footer-section">
                             <h4>Contato</h4>
                             <ul>
@@ -328,7 +301,7 @@ const Inicio = () => {
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div className="footer-bottom">
                         <p>&copy; 2023 Anjos Protetores. Todos os direitos reservados.</p>
                     </div>

@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -6,7 +6,7 @@
   text-shadow: #000 0.5px 0.5px;
 }
 
-.App{
+.App {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,4 +14,8 @@
   background-image: url("assets/bglogin.jpg");
   background-size: cover;
   background-position: center;
+}
+
+.default-container {
+  width: 100%;
 }

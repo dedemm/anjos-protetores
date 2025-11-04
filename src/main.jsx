@@ -13,23 +13,25 @@ import Inicio from './routes/Inicio/Inicio.jsx';
 import Perfil from './routes/Perfil/Perfil.jsx';
 import EditarPerfil from './routes/Perfil/EditarPerfil.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
+import Adocao from './routes/Adocao/Adocao.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      {path: "/", element: <Inicio />},
+      { path: "/", element: <Inicio /> },
       { path: "login", element: <Login /> },
       { path: "cadastro", element: <Cadastro /> },
+      { path: "adocao", element: <Adocao /> },
       { path: "perfil", element: (<PrivateRoute> <Perfil /> </PrivateRoute>) },
-      {path: "perfil/editar", element: (<PrivateRoute> <EditarPerfil /> </PrivateRoute>) },
+      { path: "perfil/editar", element: (<PrivateRoute> <EditarPerfil /> </PrivateRoute>) },
     ]
   }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </StrictMode>,
 )
