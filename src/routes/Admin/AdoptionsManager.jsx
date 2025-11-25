@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import { getAllAnimals } from '../../services/animalService';
+import { getAllAnimals, getAllAnimalsADM } from '../../services/animalService';
 import './AdoptionsManager.css';
 
 const AdoptionsManager = () => {
@@ -13,70 +13,79 @@ const AdoptionsManager = () => {
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [selectedAnimalDetails, setSelectedAnimalDetails] = useState(null);
 
-  // Carrega lista de animais para o filtro
   useEffect(() => {
     const loadAnimals = async () => {
       try {
-        const data = await getAllAnimals();
+        const data = await getAllAnimalsADM();
         setAnimals(data || []);
-      } catch (e) {
-        console.error(e);
+      } catch {
         alert('Não foi possível carregar a lista de animais.');
       }
     };
     loadAnimals();
   }, []);
 
-  // Carrega pedidos para um animal específico
   const loadRequests = async (animalId) => {
     if (!animalId) {
       setRequests([]);
       return;
     }
+
     setLoadingRequests(true);
+
     try {
-      const { data } = await api.get(`/api/pvt/adoptionRequests/${animalId}`);
-      setRequests(data || []);
-    } catch (e) {
-      console.error(e);
-      alert('Não foi possível carregar os pedidos de adoção para este animal.');
+      const { data } = await api.get(`/api/pvt/adoptionRequests`);
+      const filtered = data.filter(req => req.animal?.id === animalId);
+      setRequests(filtered);
+    } catch {
+      alert('Não foi possível carregar os pedidos de adoção.');
       setRequests([]);
     } finally {
       setLoadingRequests(false);
     }
   };
 
-  const handleAnimalChange = (event) => {
+  const handleAnimalChange = async (event) => {
     const id = event.target.value;
     setSelectedAnimalId(id);
     setSelectedAnimalDetails(null);
+
+    if (id) {
+      try {
+        const { data } = await api.get(`/api/pub/animals/${id}`);
+        setSelectedAnimalDetails(data);
+      } catch {
+        alert('Erro ao carregar dados do animal.');
+      }
+    }
+
     loadRequests(id);
   };
 
-  // Ver detalhes completos do animal
   const handleViewAnimal = async (animalId) => {
     try {
       const { data } = await api.get(`/api/pub/animals/${animalId}`);
       setSelectedAnimalDetails(data);
-    } catch (e) {
-      console.error(e);
+    } catch {
       alert('Não foi possível carregar os detalhes do animal.');
     }
   };
 
-  // Aprovar adoção
-  const handleApprove = async (animalId) => {
-    if (!animalId) return;
-    const ok = window.confirm('Confirmar adoção para este solicitante?');
+  const handleApprove = async (requestId) => {
+    if (!requestId) {
+      alert("ID do pedido inválido");
+      return;
+    }
+
+    const ok = window.confirm("Confirmar adoção?");
     if (!ok) return;
 
     try {
-      await api.put(`/api/pvt/adoptionRequests/${animalId}`);
-      alert('Adoção aprovada com sucesso!');
-      loadRequests(animalId);
-    } catch (e) {
-      console.error(e);
-      alert('Falha ao aprovar a adoção.');
+      await api.put(`/api/pvt/adoptionRequests/${requestId}`);
+      alert("Adoção aprovada!");
+      loadRequests(selectedAnimalId);
+    } catch {
+      alert("Erro ao aprovar a adoção.");
     }
   };
 
@@ -110,6 +119,10 @@ const AdoptionsManager = () => {
           <p>Carregando pedidos...</p>
         ) : !selectedAnimalId ? (
           <p>Selecione um animal para ver os pedidos de adoção.</p>
+        ) : selectedAnimalDetails?.status === "ADOPTED" ? (
+          <p style={{ color: "red", fontWeight: "bold" }}>
+            Este animal já foi adotado. Não é possível aprovar novos pedidos.
+          </p>
         ) : requests.length === 0 ? (
           <p>Não há pedidos de adoção para este animal.</p>
         ) : (
@@ -125,13 +138,14 @@ const AdoptionsManager = () => {
               </tr>
             </thead>
             <tbody>
-              {requests.map((req, idx) => (
-                <tr key={idx}>
+              {requests.map((req) => (
+                <tr key={req.id}>
                   <td>{req.adopter?.name}</td>
                   <td>{req.adopter?.email}</td>
                   <td>{req.adopter?.phone}</td>
                   <td>{req.adopter?.address}</td>
                   <td>{req.animal?.status}</td>
+
                   <td className="adoptions-actions">
                     <button
                       className="btn-view"
@@ -140,12 +154,16 @@ const AdoptionsManager = () => {
                     >
                       Ver animal
                     </button>
+
                     <button
                       className="btn-approve"
                       type="button"
-                      onClick={() => handleApprove(req.animal?.id)}
+                      disabled={req.animal?.status === "ADOPTED"}
+                      onClick={() => handleApprove(req.id)}
                     >
-                      Aprovar
+                      {req.animal?.status === "ADOPTED"
+                        ? "Já adotado"
+                        : "Aprovar"}
                     </button>
                   </td>
                 </tr>

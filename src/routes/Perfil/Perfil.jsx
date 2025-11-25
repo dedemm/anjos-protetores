@@ -64,14 +64,18 @@ export default function Perfil() {
       <a href="/" className="back-icon">
         <TiArrowBackOutline />
       </a>
+
       <div className="logo">
         <img src={logo} alt="Logo" />
       </div>
+
       <h1>Meu Perfil</h1>
 
       <div className="perfil-card">
-        <p><strong>Nome:</strong> {user.name ?? user.nome}</p>
+        <p><strong>Nome:</strong> {user.name}</p>
         <p><strong>E-mail:</strong> {user.email}</p>
+        <p><strong>Telefone:</strong> {user.phone || "Não informado"}</p>
+        <p><strong>Endereço:</strong> {user.address || "Não informado"}</p>
       </div>
 
       <div className="perfil-actions">

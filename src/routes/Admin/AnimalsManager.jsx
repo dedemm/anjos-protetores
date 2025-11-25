@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllAnimals, createAnimal, deleteAnimal } from '../../services/animalService';
+import { getAllAnimals, createAnimal, deleteAnimal, getAllAnimalsADM } from '../../services/animalService';
 import { getAllSpecies } from '../../services/specieService';
 import { getRacesBySpecie } from '../../services/raceService';
 import './AnimalsManager.css';
@@ -37,7 +37,7 @@ const AnimalsManager = () => {
     const loadInitialData = async () => {
         try {
             const [animalsData, speciesData] = await Promise.all([
-                getAllAnimals(),
+                getAllAnimalsADM(),
                 getAllSpecies()
             ]);
             setAnimals(animalsData);

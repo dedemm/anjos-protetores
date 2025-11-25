@@ -3,14 +3,12 @@ import axios from 'axios';
 import { FaPaw } from 'react-icons/fa';
 import './Adocao.css';
 import Navbar from '../Navbar/Navbar';
-// 1. Importe o 'useNavigate' para poder redirecionar
 import { useNavigate } from 'react-router-dom';
 
 const Adocao = () => {
     const [animais, setAnimais] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    // 2. Crie uma instância do 'navigate'
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -33,7 +31,6 @@ const Adocao = () => {
                 });
 
                 console.log("Animais recebidos:", response.data);
-
                 setAnimais(response.data);
 
             } catch (err) {
@@ -44,7 +41,6 @@ const Adocao = () => {
                     localStorage.removeItem('token');
 
                     setTimeout(() => navigate('/login'), 2000);
-
                 } else {
                     setError("Não foi possível carregar a lista de animais. Tente novamente mais tarde.");
                 }
@@ -54,9 +50,12 @@ const Adocao = () => {
         };
 
         fetchAnimais();
-
-        // 8. Adicione 'navigate' ao array de dependências
     }, [navigate]);
+
+    const handleAdoptClick = (animalId) => {
+        const targetUrl = animalId ? `/animal/${animalId}` : '/animais';
+        navigate(targetUrl);
+    };
 
     if (loading) {
         return (
@@ -76,7 +75,7 @@ const Adocao = () => {
 
     return (
         <>
-            < Navbar />
+            <Navbar />
             <div className="default-container padding-container">
                 <div className="listagem-container">
                     <header className="listagem-header">
@@ -100,7 +99,14 @@ const Adocao = () => {
                                         <p><strong>Espécie:</strong> {animal.specie.name || 'Não informada'}</p>
                                         <p><strong>Raça:</strong> {animal.race?.name || 'Não informada'}</p>
                                         <p className="animal-descricao">{animal.description || 'Um amiguinho muito especial!'}</p>
-                                        <button className="btn-adotar">Quero Adotar</button>
+
+                                        {/* BOTÃO ALTERADO AQUI */}
+                                        <button
+                                            className="btn-adotar"
+                                            onClick={() => handleAdoptClick(animal.id)}
+                                        >
+                                            Quero Adotar
+                                        </button>
                                     </div>
                                 </div>
                             ))

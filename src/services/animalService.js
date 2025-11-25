@@ -1,9 +1,14 @@
 import api from './api';
 
-// Buscar todos os animais
+// Buscar todos os animais - SÓ OS COM STATUS AVAILABLE
 export const getAllAnimals = async () => {
     const response = await api.get('/api/pub/animals');
     return response.data;
+};
+
+// Buscar todos os animais
+export const getAllAnimalsADM = async () => {
+    return api.get("/api/pvt/animals").then(res => res.data);
 };
 
 

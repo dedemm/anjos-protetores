@@ -67,6 +67,12 @@ const Inicio = () => {
         window.location.href = '/login';
     };
 
+    // para levar para a pagina de adoção (lista de caes)
+    const handleAllAdoptClick = () => {
+        window.location.href = '/adocao';
+    };
+
+    // na foto especifica do cachorro, para levar a aba de adoção especifica dele
     const handleAdoptClick = (animalId) => {
         const targetUrl = animalId ? `/animal/${animalId}` : '/animais'; 
         window.location.href = targetUrl;
@@ -124,8 +130,10 @@ const Inicio = () => {
                         <h1>Dê um lar para um amigo de quatro patas</h1>
                         <p>Encontre seu novo melhor amigo no Anjos Protetores. Centenas de cães esperam por uma segunda chance.</p>
                         <div className="hero-buttons">
-                            <button className="primary-btn" onClick={handleAdoptClick}>Ver Cães para Adoção</button>
-                            <button className="secondary-btn">Como Funciona</button>
+                            <button className="primary-btn" onClick={handleAllAdoptClick}>Ver Cães para Adoção</button>
+                            <button className="secondary-btn" onClick={() => 
+                            {const el = document.getElementById("process"); if (el) el.scrollIntoView({ behavior: "smooth" });}}
+                            >Como Funciona</button>
                         </div>
                     </div>
                 </div>
@@ -211,7 +219,7 @@ const Inicio = () => {
                         </div>
 
                         <div className="view-all-dogs">
-                            <button className="view-all-btn" onClick={handleAdoptClick}>Ver Todos os Cães</button>
+                            <button className="view-all-btn" onClick={handleAllAdoptClick}>Ver Todos os Cães</button>
                         </div>
                     </div>
                 </div>
@@ -288,8 +296,7 @@ const Inicio = () => {
                         <h2>Pronto para mudar uma vida?</h2>
                         <p>Adote um cão e ganhe um amigo leal para sempre</p>
                         <div className="cta-buttons">
-                            <button className="primary-btn" onClick={handleAdoptClick}>Ver Cães para Adoção</button>
-                            <button className="secondary-btn">Tornar-se Voluntário</button>
+                            <button className="primary-btn" onClick={handleAllAdoptClick}>Ver Cães para Adoção</button>
                         </div>
                     </div>
                 </div>

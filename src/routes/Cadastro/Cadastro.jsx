@@ -8,6 +8,8 @@ const Cadastro = () => {
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [endereco, setEndereco] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
 
@@ -20,17 +22,16 @@ const Cadastro = () => {
         }
 
         try {
-          
             const signUpPayload = {
                 name: nome,
                 email: email,
                 password: senha,
+                phone: telefone,
+                address: endereco
             };
 
-            
             await axios.post('http://localhost:8080/api/pvt/auth/signUp', signUpPayload);
 
-           
             alert('Cadastro realizado com sucesso! Agora podes fazer o login.');
             window.location.href = '/login';
 
@@ -46,11 +47,12 @@ const Cadastro = () => {
                 <div className="logo">
                     <img src={logo} alt="Logo" />
                 </div>
+
                 <h1>Anjos Protetores de Animais - Cadastro</h1>
 
                 <div className='input-field'>
                     <input
-                        type="text" // Tipo corrigido para text
+                        type="text"
                         placeholder="Nome completo"
                         onChange={(e) => setNome(e.target.value)}
                         required
@@ -70,6 +72,26 @@ const Cadastro = () => {
 
                 <div className='input-field'>
                     <input
+                        type="text"
+                        placeholder="Telefone"
+                        onChange={(e) => setTelefone(e.target.value)}
+                        required
+                    />
+                    <FaUser className='icon' />
+                </div>
+
+                <div className='input-field'>
+                    <input
+                        type="text"
+                        placeholder="Endereço"
+                        onChange={(e) => setEndereco(e.target.value)}
+                        required
+                    />
+                    <FaUser className='icon' />
+                </div>
+
+                <div className='input-field'>
+                    <input
                         type="password"
                         placeholder="Senha"
                         onChange={(e) => setSenha(e.target.value)}
@@ -79,7 +101,8 @@ const Cadastro = () => {
                 </div>
 
                 <div className='input-field'>
-                    <input type="password"
+                    <input
+                        type="password"
                         placeholder="Confirmar senha"
                         onChange={(e) => setConfirmarSenha(e.target.value)}
                         required

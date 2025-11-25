@@ -13,37 +13,60 @@ const Animal = () => {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
 
-  useEffect(() => {
-    const buscarAnimal = async () => {
-      const token = localStorage.getItem('token');
-      const headers = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
+useEffect(() => {
+  const buscarAnimal = async () => {
+    try {
+      setLoading(true);
 
-      try {
-        setLoading(true);
-        // Usando GET e a URL correta com o ID da rota
-        const response = await fetch(`http://localhost:8080/api/pub/animals/request/${id}`, {
-          method: 'POST',
-          headers: headers
-        });
+      const response = await fetch(`http://localhost:8080/api/pub/animals/${id}`);
 
-        if (!response.ok) throw new Error('Erro na busca');
-
-        const data = await response.json();
-        setAnimal(data.animal);
-      } catch (error) {
-        console.error("Erro:", error);
-        setErro(true);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar animal");
       }
-    };
 
-    if (id) buscarAnimal();
-  }, [id]);
+      const data = await response.json();
+      setAnimal(data);
+
+    } catch (error) {
+      console.error("Erro:", error);
+      setErro(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (id) buscarAnimal();
+}, [id]);
+
+  const handleAdotar = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/pub/animals/request/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { "Authorization": `Bearer ${token}` } : {})
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Falha ao enviar pedido");
+      }
+
+      alert("Pedido de adoção enviado com sucesso!");
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao enviar o pedido de adoção");
+    }
+  };
+
+
 
   const handleVoltar = () => navigate(-1);
-  const handleAdotar = () => alert(`Solicitação enviada para ${animal.name}!`);
 
   if (loading) return <div className="loading">Carregando...</div>;
 
