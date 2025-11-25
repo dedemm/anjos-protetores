@@ -13,7 +13,7 @@ export default function Perfil() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get("/api/pvt/adopters/profile");
+        const { data } = await api.get("/api/pvt/users/profile");
         setUser(data);
       } catch (e) {
         console.error(e);

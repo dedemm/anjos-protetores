@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: Helvetica;
-  text-shadow: #000 0.5px 0.5px;
+  /* text-shadow: #000 0.5px 0.5px; */
 }
 
 .App {
@@ -17,5 +17,7 @@
 }
 
 .default-container {
-  width: 100%;
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
 }

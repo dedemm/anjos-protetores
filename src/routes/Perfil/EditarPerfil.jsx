@@ -63,7 +63,7 @@ export default function EditarPerfil() {
           E-mail
           <input type="email" name="email" value={form.email} onChange={onChange} required />
         </label>
-                <label>
+        <label>
           Senha
           <input type="password" name="password" value={form.password} onChange={onChange} required />
         </label>

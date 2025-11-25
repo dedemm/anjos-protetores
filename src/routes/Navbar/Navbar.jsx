@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { isAdmin, logout } from '../../services/auth'; // <--- 1. IMPORTE ISTO
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // <--- 1. ADICIONE useLocation
+import { isAdmin, logout } from '../../services/auth';
 import './Navbar.css';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
-    
-    // 2. Verificamos se existe token no localStorage
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
-    
-    // 3. Verificamos se é Admin usando nossa função nova
-    const [userIsAdmin, setUserIsAdmin] = useState(isAdmin()); 
+    const [userIsAdmin, setUserIsAdmin] = useState(isAdmin());
 
     const navigate = useNavigate();
+    const location = useLocation(); 
+
+    useEffect(() => {
+        if (location.hash) {
+            const targetId = location.hash.replace('#', '');
+            const element = document.getElementById(targetId);
+
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                setTimeout(() => {
+                    const elementLate = document.getElementById(targetId);
+                    if (elementLate) {
+                        elementLate.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 100);
+            }
+        } else if (location.pathname === '/') {
+             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [location]); 
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,29 +44,12 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Função para o botão de Login
-    const handleLoginClick = () => {
-        navigate('/login');
-    };
-
-    // Função para o botão de Adoção
-    const handleAdoptClick = () => {
-        navigate('/adocao');
-    };
-
-    // Função para o botão de Perfil
-    const handleProfileClick = () => {
-        navigate('/perfil');
-    };
-
-    // Função para o botão de Admin (NOVO)
-    const handleAdminClick = () => {
-        navigate('/admin');
-    };
-
-    // Função para o botão de Logout
+    const handleLoginClick = () => navigate('/login');
+    const handleAdoptClick = () => navigate('/adocao');
+    const handleProfileClick = () => navigate('/perfil');
+    const handleAdminClick = () => navigate('/admin');
     const handleLogoutClick = () => {
-        logout(); // Usa a função do auth.js
+        logout();
         setIsLoggedIn(false);
         setUserIsAdmin(false);
     };
@@ -82,13 +83,11 @@ const Navbar = () => {
                 <div className="nav-buttons">
                     {isLoggedIn ? (
                         <>
-                            {/* 4. RENDERIZAÇÃO CONDICIONAL DO BOTÃO ADMIN */}
                             {userIsAdmin && (
-                                <button className="admin-btn" onClick={handleAdminClick} style={{backgroundColor: '#d32f2f', color: 'white', marginRight: '10px'}}>
+                                <button className="admin-btn" onClick={handleAdminClick}>
                                     Admin
                                 </button>
                             )}
-                            
                             <button className="profile-btn" onClick={handleProfileClick}>
                                 Ver Perfil
                             </button>
@@ -101,7 +100,6 @@ const Navbar = () => {
                             Login
                         </button>
                     )}
-
                     <button className="adopt-btn" onClick={handleAdoptClick}>
                         Quero Adotar
                     </button>

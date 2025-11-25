@@ -75,39 +75,40 @@ const Adocao = () => {
     }
 
     return (
-        <div className="default-container padding-container">
+        <>
             < Navbar />
+            <div className="default-container padding-container">
+                <div className="listagem-container">
+                    <header className="listagem-header">
+                        <h1><FaPaw /> Encontre seu novo amigo!</h1>
+                        <p>Estes são os animais que esperam por um lar.</p>
+                    </header>
 
-            <div className="listagem-container">
-                <header className="listagem-header">
-                    <h1><FaPaw /> Encontre seu novo amigo!</h1>
-                    <p>Estes são os animais que esperam por um lar.</p>
-                </header>
-
-                <div className="animais-grid">
-                    {animais.length === 0 ? (
-                        <p>Nenhum animal disponível para adoção no momento.</p>
-                    ) : (
-                        animais.map(animal => (
-                            <div className="animal-card" key={animal.id}>
-                                <img
-                                    src={animal.fotoUrl || 'https://premierpet.com.br/wp-content/uploads/2025/04/model-banner-dicasprimeirocachorro-mobile-v1.png'}
-                                    alt={animal.nome}
-                                    className="animal-foto"
-                                />
-                                <div className="animal-info">
-                                    <h3>{animal.nome}</h3>
-                                    <p><strong>Espécie:</strong> {animal.specie.name || 'Não informada'}</p>
-                                    <p><strong>Raça:</strong> {animal.race?.name || 'Não informada'}</p>
-                                    <p className="animal-descricao">{animal.description || 'Um amiguinho muito especial!'}</p>
-                                    <button className="btn-adotar">Quero Adotar</button>
+                    <div className="animais-grid">
+                        {animais.length === 0 ? (
+                            <p>Nenhum animal disponível para adoção no momento.</p>
+                        ) : (
+                            animais.map(animal => (
+                                <div className="animal-card" key={animal.id}>
+                                    <img
+                                        src={animal.fotoUrl || 'https://premierpet.com.br/wp-content/uploads/2025/04/model-banner-dicasprimeirocachorro-mobile-v1.png'}
+                                        alt={animal.nome}
+                                        className="animal-foto"
+                                    />
+                                    <div className="animal-info">
+                                        <h3>{animal.nome}</h3>
+                                        <p><strong>Espécie:</strong> {animal.specie.name || 'Não informada'}</p>
+                                        <p><strong>Raça:</strong> {animal.race?.name || 'Não informada'}</p>
+                                        <p className="animal-descricao">{animal.description || 'Um amiguinho muito especial!'}</p>
+                                        <button className="btn-adotar">Quero Adotar</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    )}
+                            ))
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -15,6 +15,7 @@ import EditarPerfil from './routes/Perfil/EditarPerfil.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import Adocao from './routes/Adocao/Adocao.jsx';
 import Admin from './routes/Admin/Admin.jsx';
+import Animal from './routes/Animal/Animal.jsx';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "cadastro", element: <Cadastro /> },
       { path: "adocao", element: <Adocao /> },
+      { path: "animal/:id", element: <Animal /> },
       { path: "perfil", element: (<PrivateRoute> <Perfil /> </PrivateRoute>) },
       { path: "perfil/editar", element: (<PrivateRoute> <EditarPerfil /> </PrivateRoute>) },
       { path: "/admin", element: (<PrivateRoute> <Admin /> </PrivateRoute>) },
