@@ -92,22 +92,65 @@
     background-color: #eee;
 }
 .thumb-image {
-    width: 80px;          /* Tamanho fixo */
-    height: 80px;         /* Quadrado */
-    object-fit: cover;    /* Corta a imagem para preencher sem esticar */
-    border-radius: 8px;   /* Cantos arredondados */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra leve */
+    width: 80px;      
+    height: 80px;       
+    object-fit: cover;  
+    border-radius: 8px;   
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }
 
-/* 2. Estilo para o preview no FORMULÁRIO (Ao selecionar foto) */
+
 .preview-image {
     display: block;
     margin-top: 10px;
     width: 100%;
-    max-width: 250px;     /* Não deixa ficar gigante */
+    max-width: 250px;     
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
     border: 2px dashed #ccc;
     padding: 2px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 8px 12px;     
+    border: none;
+    border-radius: 4px;    
+    cursor: pointer;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-right: 5px;      
+    transition: opacity 0.2s;
+}
+
+
+.btn-edit {
+    background-color: #1976d2; 
+}
+
+
+.btn-delete {
+    background-color: #d32f2f; 
+}
+
+
+.btn-edit:hover, .btn-delete:hover {
+    opacity: 0.9; 
+}
+
+.btn-cancel {
+    grid-column: 1 / -1;    
+    background-color: #757575; 
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;       
+}
+
+.btn-cancel:hover {
+    background-color: #616161; 
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import { getAllAnimals, getAllAnimalsADM } from '../../services/animalService';
+import { getAllAnimalsADM } from '../../services/animalService';
 import './AdoptionsManager.css';
 
 const AdoptionsManager = () => {
@@ -35,6 +35,7 @@ const AdoptionsManager = () => {
 
     try {
       const { data } = await api.get(`/api/pvt/adoptionRequests`);
+      // Filtra apenas os pedidos deste animal
       const filtered = data.filter(req => req.animal?.id === animalId);
       setRequests(filtered);
     } catch {
@@ -71,29 +72,60 @@ const AdoptionsManager = () => {
     }
   };
 
-  const handleApprove = async (requestId) => {
-    if (!requestId) {
-      alert("ID do pedido inválido");
-      return;
-    }
+  // --- AÇÕES ---
 
-    const ok = window.confirm("Confirmar adoção?");
+  const handleApprove = async (requestId) => {
+    if (!requestId) return;
+    const ok = window.confirm("Tem certeza que deseja APROVAR esta adoção?");
     if (!ok) return;
 
     try {
       await api.put(`/api/pvt/adoptionRequests/${requestId}`);
-      alert("Adoção aprovada!");
+      alert("Adoção aprovada com sucesso!");
+      // Recarrega os dados
       loadRequests(selectedAnimalId);
+      if (selectedAnimalId) handleAnimalChange({ target: { value: selectedAnimalId } });
     } catch {
       alert("Erro ao aprovar a adoção.");
+    }
+  };
+
+  const handleRevert = async (requestId) => {
+    if (!requestId) return;
+    const ok = window.confirm("Tem certeza que deseja REVERTER esta adoção? O animal ficará disponível novamente.");
+    if (!ok) return;
+
+    try {
+      await api.put(`/api/pvt/adoptionRequests/${requestId}/revoke`);
+      alert("Adoção revertida! Animal está disponível.");
+      loadRequests(selectedAnimalId);
+      if (selectedAnimalId) handleAnimalChange({ target: { value: selectedAnimalId } });
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao reverter a adoção.");
+    }
+  };
+
+  const handleDisapprove = async (requestId) => {
+    if (!requestId) return;
+    const ok = window.confirm("Tem certeza que deseja DESAPROVAR e excluir este pedido?");
+    if (!ok) return;
+
+    try {
+      await api.delete(`/api/pvt/adoptionRequests/${requestId}`);
+      alert("Pedido excluído.");
+      loadRequests(selectedAnimalId);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao excluir o pedido.");
     }
   };
 
   return (
     <div className="manager-container">
       <div className="adoptions-header">
-        <h2>Pedidos de Adoção</h2>
-        <p>Selecione um animal para visualizar os pedidos e definir o adotante.</p>
+        <h2>Gerenciar Adoções</h2>
+        <p>Selecione um animal para visualizar os interessados.</p>
       </div>
 
       <div className="adoptions-toolbar">
@@ -107,7 +139,7 @@ const AdoptionsManager = () => {
             <option value="">Selecione um animal</option>
             {animals.map((animal) => (
               <option key={animal.id} value={animal.id}>
-                {animal.name}
+                {animal.name} - {animal.status}
               </option>
             ))}
           </select>
@@ -118,56 +150,95 @@ const AdoptionsManager = () => {
         {loadingRequests ? (
           <p>Carregando pedidos...</p>
         ) : !selectedAnimalId ? (
-          <p>Selecione um animal para ver os pedidos de adoção.</p>
-        ) : selectedAnimalDetails?.status === "ADOPTED" ? (
-          <p style={{ color: "red", fontWeight: "bold" }}>
-            Este animal já foi adotado. Não é possível aprovar novos pedidos.
-          </p>
+          <p>Selecione um animal acima.</p>
         ) : requests.length === 0 ? (
           <p>Não há pedidos de adoção para este animal.</p>
         ) : (
           <table className="adoptions-table">
             <thead>
               <tr>
-                <th>Adotante</th>
-                <th>E-mail</th>
-                <th>Telefone</th>
-                <th>Endereço</th>
-                <th>Status do Animal</th>
+                <th>Interessado</th>
+                <th>Contato</th>
+                <th>Status Atual</th>
                 <th>Ações</th>
               </tr>
             </thead>
             <tbody>
-              {requests.map((req) => (
-                <tr key={req.id}>
-                  <td>{req.adopter?.name}</td>
-                  <td>{req.adopter?.email}</td>
-                  <td>{req.adopter?.phone}</td>
-                  <td>{req.adopter?.address}</td>
-                  <td>{req.animal?.status}</td>
+              {requests.map((req) => {
+                // Verifica se este pedido é o que está "VIGENTE" (animal adotado por esta pessoa)
+                // Obs: Comparação segura caso animal ou adoptedBy sejam nulos
+                const isTheAdopter = 
+                    req.animal?.status === "ADOPTED" && 
+                    req.animal?.adoptedBy?.id === req.adopter?.id;
+                
+                const isAdoptedByOther = 
+                    req.animal?.status === "ADOPTED" && 
+                    !isTheAdopter;
 
-                  <td className="adoptions-actions">
-                    <button
-                      className="btn-view"
-                      type="button"
-                      onClick={() => handleViewAnimal(req.animal?.id)}
-                    >
-                      Ver animal
-                    </button>
+                return (
+                  <tr key={req.id} className={isTheAdopter ? "row-approved" : ""}>
+                    <td>
+                      <strong>{req.adopter?.name}</strong><br />
+                      <small>{req.adopter?.address}</small>
+                    </td>
+                    <td>
+                      {req.adopter?.email}<br />
+                      {req.adopter?.phone}
+                    </td>
+                    <td>
+                      {isTheAdopter ? (
+                        <span className="badge-approved">APROVADO</span>
+                      ) : isAdoptedByOther ? (
+                        <span className="badge-disabled">Adotado por outro</span>
+                      ) : (
+                        <span className="badge-pending">Pendente</span>
+                      )}
+                    </td>
 
-                    <button
-                      className="btn-approve"
-                      type="button"
-                      disabled={req.animal?.status === "ADOPTED"}
-                      onClick={() => handleApprove(req.id)}
-                    >
-                      {req.animal?.status === "ADOPTED"
-                        ? "Já adotado"
-                        : "Aprovar"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    <td className="adoptions-actions">
+                      
+                      {/* Lógica dos Botões */}
+                      
+                      {req.animal?.status === "AVAILABLE" && (
+                        <>
+                          <button
+                            className="btn-approve"
+                            onClick={() => handleApprove(req.id)}
+                            title="Aprovar Adoção"
+                          >
+                            Aprovar
+                          </button>
+                          <button
+                            className="btn-delete"
+                            onClick={() => handleDisapprove(req.id)}
+                            title="Recusar/Excluir Pedido"
+                          >
+                            Recusar
+                          </button>
+                        </>
+                      )}
+
+                      {isTheAdopter && (
+                        <button
+                          className="btn-revert" // Você pode criar estilo css para este botão se quiser
+                          onClick={() => handleRevert(req.id)}
+                          title="Cancelar Adoção"
+                          style={{ backgroundColor: '#ff9800', color: 'white', border: 'none', padding: '8px', borderRadius: '4px', cursor: 'pointer' }}
+                        >
+                          Reverter Adoção
+                        </button>
+                      )}
+
+                      {isAdoptedByOther && (
+                        <button disabled className="btn-disabled" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                          Indisponível
+                        </button>
+                      )}
+
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
@@ -175,34 +246,21 @@ const AdoptionsManager = () => {
 
       {selectedAnimalDetails && (
         <div className="animal-details-card">
-          <h3>Detalhes do Animal</h3>
-
-          {/* FOTO */}
-          <div style={{ marginBottom: "15px" }}>
+          <h3>Dados do Animal: {selectedAnimalDetails.name}</h3>
+          <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
             <img
-              src={selectedAnimalDetails.photoUrl || "https://via.placeholder.com/200?text=Sem+Foto"}
+              src={selectedAnimalDetails.photoUrl || "https://via.placeholder.com/150?text=Sem+Foto"}
               alt={selectedAnimalDetails.name}
-              style={{
-                width: "200px",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "10px",
-                border: "1px solid #ccc"
-              }}
+              style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px" }}
             />
+            <div>
+               <p><strong>Raça/Espécie:</strong> {selectedAnimalDetails.specie?.name} / {selectedAnimalDetails.race?.name}</p>
+               <p><strong>Status:</strong> {selectedAnimalDetails.status}</p>
+               {selectedAnimalDetails.adoptedBy && (
+                 <p style={{ color: 'green' }}><strong>Adotado por:</strong> {selectedAnimalDetails.adoptedBy.name}</p>
+               )}
+            </div>
           </div>
-
-          <p><strong>Nome:</strong> {selectedAnimalDetails.name}</p>
-          <p><strong>Status:</strong> {selectedAnimalDetails.status}</p>
-
-          {/* NOVOS CAMPOS */}
-          <p><strong>Idade:</strong> {selectedAnimalDetails.age ?? "Não informada"}</p>
-          <p><strong>Sexo:</strong> {selectedAnimalDetails.gender ?? "Não informado"}</p>
-          <p><strong>Porte:</strong> {selectedAnimalDetails.animalSize ?? "Não informado"}</p>
-
-          <p><strong>Espécie:</strong> {selectedAnimalDetails.specie?.name}</p>
-          <p><strong>Raça:</strong> {selectedAnimalDetails.race?.name}</p>
-          <p><strong>Descrição:</strong> {selectedAnimalDetails.description}</p>
         </div>
       )}
     </div>
