@@ -10,12 +10,11 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-section">
             <h3>Anjos Protetores</h3>
-            <p>Dando uma segunda chance para cães abandonados desde 2018.</p>
+            <p>Dando uma segunda chance para animais abandonados desde 2020.</p>
             <div className="social-links">
               {/* Adicionado aria-label para acessibilidade e target para abrir em nova aba */}
-              <a href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook"></i></a>
-              <a href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
-              <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a>
+              <a href="https://www.facebook.com/anjos.protetores.de.animais/" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook"></i></a>
+              <a href="https://www.instagram.com/anjosprotetores_associacao" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
             </div>
           </div>
 
@@ -32,9 +31,10 @@ const Footer = () => {
           <div className="footer-section">
             <h4>Contato</h4>
             <ul>
-              <li><i className="fas fa-map-marker-alt"></i> Rua dos Animais, 123</li>
-              <li><i className="fas fa-phone"></i> (11) 9999-9999</li>
-              <li><i className="fas fa-envelope"></i> contato@anjosprotetores.org</li>
+              <li><i className="fas fa-map-marker-alt"></i> Piraí do Sul, PR</li>
+              <li><i className="fas fa-phone"></i> (42) 9832-2265</li>
+              <li><i className="fas fa-envelope"></i>Pix: 51.888.470/0001-74</li>
+              <li><i className="fas fa-envelope"></i>@anjosprotetores_associacao</li>
             </ul>
           </div>
         </div>

@@ -150,16 +150,16 @@ const Inicio = () => {
                         <div className="about-text">
                             <div className='about-text-content'>
                                 <h2>Sobre o Anjos Protetores</h2>
-                                <p>O Anjos Protetores é uma organização sem fins lucrativos dedicada a resgatar, reabilitar e encontrar lares amorosos para cães abandonados e maltratados.</p>
-                                <p>Desde nossa fundação, já ajudamos mais de 1.000 cães a encontrarem famílias amorosas. Nossa missão é garantir que cada animal tenha a chance de viver uma vida feliz e saudável.</p>
+                                <p>O Anjos Protetores é uma organização sem fins lucrativos dedicada a resgatar, reabilitar e encontrar lares amorosos para animais abandonados e maltratados.</p>
+                                <p>Desde nossa fundação, já ajudamos mais de 1.300 animais a encontrarem famílias amorosas. Nossa missão é garantir que cada animal tenha a chance de viver uma vida feliz e saudável.</p>
                             </div>
                             <div className="stats">
                                 <div className="stat">
-                                    <h3>1.000+</h3>
-                                    <p>Cães Adotados</p>
+                                    <h3>1.300+</h3>
+                                    <p>Animais ajudados</p>
                                 </div>
                                 <div className="stat">
-                                    <h3>50+</h3>
+                                    <h3>20+</h3>
                                     <p>Voluntários</p>
                                 </div>
                                 <div className="stat">
@@ -268,21 +268,21 @@ const Inicio = () => {
                     <div className="testimonials">
                         <div className="testimonial">
                             <div className="testimonial-content">
-                                <p>"Adotamos a Luna há 6 meses e ela trouxe tanta alegria para nossa família. O processo foi muito bem acompanhado pela equipe do Anjos Protetores."</p>
+                                <p>"Meus pets são a alegria da casa e parte essencial da nossa família! Cada um com sua personalidade. Eles me ensinam cada vez mais sobre o amor incondicional. São meu abrigo e minha paz. O carinho e a gratidão por termos acolhido-os é muito nítido nos olhares deles."</p>
                             </div>
                             <div className="testimonial-author">
-                                <h4>Maria Silva</h4>
-                                <p>Família adotante da Luna</p>
+                                <h4>Anna Vitória</h4>
+                                <p>Relações públicas da associação</p>
                             </div>
                         </div>
 
                         <div className="testimonial">
                             <div className="testimonial-content">
-                                <p>"O Rex se adaptou perfeitamente à nossa casa. Estamos muito gratos ao Anjos Protetores por todo o apoio durante o processo de adoção."</p>
+                                <p>"Entre tantos resgates marcantes, um em especial ficou na memória da família. Durante um aniversário, um pequeno cachorro apareceu e ficou ao lado da tia de Anna, que logo se encantou por ele. Após esperarem para ver se o tutor aparecia, o cão acabou indo embora. Foram três dias de buscas, até que finalmente ele foi encontrado em um lixão. Hoje, ele vive em Ponta Grossa, com a tia de Anna, e leva uma verdadeira vida de príncipe."</p>
                             </div>
                             <div className="testimonial-author">
-                                <h4>João Santos</h4>
-                                <p>Família adotante do Rex</p>
+                                <h4>Anna Vitória</h4>
+                                <p>Relações públicas da associação</p>
                             </div>
                         </div>
                     </div>
