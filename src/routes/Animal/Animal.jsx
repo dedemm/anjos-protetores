@@ -1,55 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaPaw } from 'react-icons/fa';
-import './Animal.css';
-import Navbar from '../Navbar/Navbar';
+import { FaPaw } from 'react-icons/fa';
 import { TiArrowBackOutline } from 'react-icons/ti';
+import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
+import './Animal.css';
 
 const Animal = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // Estados
   const [animal, setAnimal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
+  const [pedidoEnviado, setPedidoEnviado] = useState(false); // Controla o estado do botão
 
-const [pedidoEnviado, setPedidoEnviado] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
 
-useEffect(() => {
-
-  const token = localStorage.getItem('token');
-
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-  const buscarAnimal = async () => {
-    try {
-      setLoading(true);
-
-      const response = await fetch(`http://localhost:8080/api/pub/animals/${id}`);
-
-      if (!response.ok) {
-        throw new Error("Erro ao buscar animal");
-      }
-
-      const data = await response.json();
-      setAnimal(data);
-
-    } catch (error) {
-      console.error("Erro:", error);
-      setErro(true);
-    } finally {
-      setLoading(false);
+    // Se não tiver token, redireciona para login
+    if (!token) {
+      navigate('/login');
+      return;
     }
-  };
 
-  if (id) buscarAnimal();
-}, [id]);
+    const buscarDados = async () => {
+      try {
+        setLoading(true);
+
+        // 1. Busca os detalhes do animal
+        const responseAnimal = await fetch(`http://localhost:8080/api/pub/animals/${id}`);
+        if (!responseAnimal.ok) {
+          throw new Error("Erro ao buscar animal");
+        }
+        const dataAnimal = await responseAnimal.json();
+        setAnimal(dataAnimal);
+
+        // 2. Verifica se o usuário JÁ enviou um pedido para este animal
+        // Isso garante que o botão fique verde mesmo se der F5 na página
+        const responseCheck = await fetch(
+            `http://localhost:8080/api/pub/animals/request/check/${id}`,
+            {
+                headers: { 
+                  "Authorization": `Bearer ${token}`,
+                  "Content-Type": "application/json"
+                }
+            }
+        );
+        
+        if (responseCheck.ok) {
+            const jaPediu = await responseCheck.json(); // Retorna true ou false
+            setPedidoEnviado(jaPediu); // Atualiza o estado inicial do botão
+        }
+
+      } catch (error) {
+        console.error("Erro:", error);
+        setErro(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+        buscarDados();
+    }
+  }, [id, navigate]);
 
   const handleAdotar = async () => {
     const token = localStorage.getItem("token");
 
+    // Evita duplo clique se já foi enviado
     if (pedidoEnviado) return;
 
     try {
@@ -68,6 +89,7 @@ useEffect(() => {
         throw new Error("Falha ao enviar pedido");
       }
 
+      // Atualiza o estado visual imediatamente
       setPedidoEnviado(true);
 
       alert("Pedido de adoção enviado com sucesso! Entraremos em contato em breve via e-mail ou whatsapp para te comunicar nossa decisão.");
@@ -76,8 +98,6 @@ useEffect(() => {
       alert("Erro ao enviar o pedido de adoção");
     }
   };
-
-
 
   const handleVoltar = () => navigate(-1);
 
@@ -89,7 +109,7 @@ useEffect(() => {
     );
   }
 
-  console.log(animal)
+  // Objeto auxiliar para exibir dados com segurança (evita erros se for null)
   const animalDisplay = {
     name: animal.name,
     description: animal.description,
@@ -126,8 +146,8 @@ useEffect(() => {
               <h1 className="detalhes-titulo">{animalDisplay.name}</h1>
 
               <div className="tags-container">
-                <span className="tag especie">{animal.specie.name}</span>
-                <span className="tag raca">{animal.race.name}</span>
+                <span className="tag especie">{animalDisplay.specie}</span>
+                <span className="tag raca">{animalDisplay.race}</span>
               </div>
 
               <div className="info-grid">
@@ -150,17 +170,16 @@ useEffect(() => {
                 <p>{animalDisplay.description}</p>
               </div>
 
+              {/* Botão de Adoção Dinâmico */}
               <button 
                 className={`btn-adotar-grande ${pedidoEnviado ? 'btn-sucesso' : ''}`} 
                 onClick={handleAdotar}
-                disabled={pedidoEnviado} // Desabilita o botão após o sucesso
-                style={pedidoEnviado ? { backgroundColor: '#4CAF50', cursor: 'default' } : {}} // Estilo inline rápido para verde
+                disabled={pedidoEnviado} // Desabilita se já pediu
+                style={pedidoEnviado ? { backgroundColor: '#4CAF50', cursor: 'default' } : {}}
               >
                 {pedidoEnviado ? (
-                  // Texto quando o pedido foi feito
                   <span>Requisição feita com sucesso!</span>
                 ) : (
-                  // Texto original
                   <>
                     <FaPaw /> Quero Adotar o {animalDisplay.name}
                   </>
