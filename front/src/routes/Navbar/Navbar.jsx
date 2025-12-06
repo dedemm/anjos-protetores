@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // <--- 1. ADICIONE useLocation
 import { isAdmin, logout } from '../../services/auth';
 import './Navbar.css';
 
@@ -48,10 +48,6 @@ const Navbar = () => {
     const handleAdoptClick = () => navigate('/adocao');
     const handleProfileClick = () => navigate('/perfil');
     const handleAdminClick = () => navigate('/admin');
-    
-    // 1. ADICIONA ESTA FUNÇÃO AQUI
-    const handleRequestsClick = () => navigate('/meus-pedidos');
-
     const handleLogoutClick = () => {
         logout();
         setIsLoggedIn(false);
@@ -92,11 +88,6 @@ const Navbar = () => {
                                     Admin
                                 </button>
                             )}
-                            {/* 2. ADICIONA ESTE BOTÃO AQUI */}
-                            <button className="profile-btn" onClick={handleRequestsClick}>
-                                Meus Pedidos
-                            </button>
-
                             <button className="profile-btn" onClick={handleProfileClick}>
                                 Ver Perfil
                             </button>

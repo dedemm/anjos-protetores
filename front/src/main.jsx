@@ -16,7 +16,6 @@ import PrivateRoute from './routes/PrivateRoute.jsx';
 import Adocao from './routes/Adocao/Adocao.jsx';
 import Admin from './routes/Admin/Admin.jsx';
 import Animal from './routes/Animal/Animal.jsx';
-import MeusPedidos from './routes/MeusPedidos/MeusPedidos.jsx'
 
 const router = createBrowserRouter([
   {
@@ -31,7 +30,6 @@ const router = createBrowserRouter([
       { path: "perfil", element: (<PrivateRoute> <Perfil /> </PrivateRoute>) },
       { path: "perfil/editar", element: (<PrivateRoute> <EditarPerfil /> </PrivateRoute>) },
       { path: "/admin", element: (<PrivateRoute> <Admin /> </PrivateRoute>) },
-      { path: "/meus-pedidos", element: <PrivateRoute><MeusPedidos /></PrivateRoute> },
     ]
   }
 ]);
