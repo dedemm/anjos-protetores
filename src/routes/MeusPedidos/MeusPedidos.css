@@ -23,6 +23,31 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.card-pedido.clickable {
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.card-pedido.clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.thumb-and-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.pedido-thumb {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f6f6f6;
+}
+
 .info-animal h3 {
   margin: 0 0 0.5rem 0;
   color: #333;
@@ -41,4 +66,59 @@
 
 .btn-cancelar:hover {
   background-color: #cc0000;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: #fff;
+  width: 90%;
+  max-width: 900px;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-body {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.modal-image {
+  width: 400px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.modal-info {
+  flex: 1;
+}
+
+.descricao {
+  margin-top: 12px;
+  color: #444;
 }
