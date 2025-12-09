@@ -71,12 +71,14 @@ export default function MeusPedidos() {
                 </div>
               </div>
               
-              <button 
-                className="btn-cancelar" 
-                onClick={(e) => { e.stopPropagation(); handleCancel(req.id); }}
-              >
-                Cancelar Pedido
-              </button>
+              {req.animal?.status !== 'ADOPTED' && (
+                <button 
+                  className="btn-cancelar" 
+                  onClick={(e) => { e.stopPropagation(); handleCancel(req.id); }}
+                >
+                  Cancelar Pedido
+                </button>
+              )}
             </div>
           ))}
         </div>
